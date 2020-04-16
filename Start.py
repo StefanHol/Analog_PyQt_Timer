@@ -43,7 +43,7 @@ if __name__ == "__main__":
     autoupdate = Event()
     my_gauge = mainclass(None, autoupdate)
     my_gauge.setWindowTitle("Timer")
-    my_gauge.setWindowIcon(QIcon("banner.png"))
+    my_gauge.setWindowIcon(QIcon("icon.png"))
     my_gauge.show()
 
     autoupdate.set()
