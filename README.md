@@ -1,3 +1,5 @@
 # Analog_PyQt_Timer
 
-run: Start.py
+![Preview](img/Preview.JPG)
+
+Just run: Start.py
