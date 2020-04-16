@@ -157,7 +157,7 @@ class AnalogGaugeWidget(QWidget):
         # initialize Main value text
         self.enable_value_text = True
         self.value_fontname = "Decorative"
-        self.initial_value_fontsize = 40
+        self.initial_value_fontsize = 50
         self.value_fontsize = self.initial_value_fontsize
         self.text_radius_factor = 0.7
 
@@ -628,7 +628,7 @@ class AnalogGaugeWidget(QWidget):
 
         # angle_distance = (float(self.scale_angle_size) / float(self.scala_main_count))
         # for i in range(self.scala_main_count + 1):
-        text = str(int(self.value))
+        text = str((self.value))
         w = fm.width(text) + 1
         h = fm.height()
         painter.setFont(QFont(self.value_fontname, self.value_fontsize))
