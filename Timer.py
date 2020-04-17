@@ -31,7 +31,7 @@ try:
 except:
     try:
         # print("Try5: analoggaugewidget.py")
-        from PyQt5.QtWidgets import QMainWindow, QInputDialog, QPushButton, QSizePolicy, QFileDialog
+        from PyQt5.QtWidgets import QMainWindow, QInputDialog, QPushButton, QSizePolicy, QFileDialog, QAbstractItemView
 
         from PyQt5.QtWidgets import QWidget
         from PyQt5.QtWidgets import QApplication
@@ -183,9 +183,12 @@ class mainclass(QMainWindow):
             if (self.my_gauge.name_list.count() > 0) and (
                     self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem()) < self.my_gauge.name_list.count()-1):
                 # print("set state: ", self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem())+1)
-                self.my_gauge.name_list.setCurrentRow(
-                            self.my_gauge.name_list.row(
-                            self.my_gauge.name_list.currentItem())+1)
+                index = self.my_gauge.name_list.row(
+                            self.my_gauge.name_list.currentItem())+1
+                self.my_gauge.name_list.setCurrentRow(index)
+
+                self.my_gauge.name_list.scrollToItem(self.my_gauge.name_list.item(int(index)),
+                                                      QAbstractItemView.PositionAtCenter)
                 # print("Selected name = ", self.my_gauge.name_list.currentItem().text())
                 # print( self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem()))
 
