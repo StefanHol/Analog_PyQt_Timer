@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+
+###
+# Author: Stefan Holstein
+# Timer for the Virtual PythonBarCamp Cologne 2020
+#
+# Sorry for mixing english & german notes
+#
+# Todo: print() in logging() ausgabe aendern
+###
 
 from threading import Thread, Event
 # from overwatch import overwatch
