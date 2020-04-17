@@ -133,12 +133,27 @@ class mainclass(QMainWindow):
 
         # add banner image
         self.pixmap = QPixmap('banner.png')
+        # self.pixmap = self.pixmap.scaledToWidth(300)
         self.my_gauge.label.setPixmap(self.pixmap)
         self.my_gauge.label.setScaledContents(True)
 
         self.my_gauge.widget.initial_value_fontsize = 50
 
         QTimer.singleShot(10, self.check_new_data)
+        self.update()
+
+
+    # # Todo emit event
+    # def paintEvent(self, event):
+    #     qp = QPainter()
+    #     search_pixmap = QPixmap('banner.png')
+    #     posX = 30
+    #     posY = 50
+    #     width = 250
+    #     height = 50
+    #     qp.drawPixmap(posX, posY, width, height,
+    #                   search_pixmap.scaled(width, height, transformMode=Qt.SmoothTransformation))
+
 
     def set_timer_seconds(self):
         min = 5
