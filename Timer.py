@@ -165,8 +165,8 @@ class mainclass(QMainWindow):
         # add banner image
         self.pixmap = QPixmap('banner.png')
         # self.pixmap = self.pixmap.scaledToWidth(300)
-        self.my_gauge.label.setPixmap(self.pixmap)
-        self.my_gauge.label.setScaledContents(True)
+        self.my_gauge.banner.setPixmap(self.pixmap)
+        self.my_gauge.banner.setScaledContents(True)
 
         self.my_gauge.widget.initial_value_fontsize = 50
 
