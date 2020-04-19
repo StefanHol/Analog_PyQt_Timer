@@ -169,11 +169,42 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="clear">
+           <widget class="QWidget" name="Setup">
             <attribute name="title">
-             <string>Clear</string>
+             <string>Setup</string>
             </attribute>
-            <layout class="QGridLayout" name="gridLayout_2"/>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="checkBox_toggle_info">
+               <property name="text">
+                <string>Switch text: Button &lt;-&gt; Label</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkBox_show_name_label">
+               <property name="text">
+                <string>Show Label</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
          </item>
