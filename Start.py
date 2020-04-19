@@ -44,6 +44,7 @@ if __name__ == "__main__":
     my_gauge = mainclass(None, autoupdate)
     my_gauge.setWindowTitle("Timer")
     my_gauge.setWindowIcon(QIcon("icon.png"))
+    # my_gauge.se
     my_gauge.show()
 
     autoupdate.set()

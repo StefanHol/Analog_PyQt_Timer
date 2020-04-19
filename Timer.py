@@ -31,7 +31,8 @@ try:
 except:
     try:
         # print("Try5: analoggaugewidget.py")
-        from PyQt5.QtWidgets import QMainWindow, QInputDialog, QPushButton, QSizePolicy, QFileDialog, QAbstractItemView
+        from PyQt5.QtWidgets import QMainWindow, QInputDialog, QPushButton, QSizePolicy, QFileDialog, QAbstractItemView, \
+            QLabel
 
         from PyQt5.QtWidgets import QWidget
         from PyQt5.QtWidgets import QApplication
@@ -68,6 +69,8 @@ class mainclass(QMainWindow):
         self.my_gauge = Ui_MainWindow()
         self.my_gauge.setupUi(self)
 
+        # self.my_gauge.name_list.setFont()
+
         self.my_gauge.widget.enable_barGraph = True
         self.my_gauge.widget.value_needle_snapzone = 1
         self.my_gauge.widget.set_scale_polygon_colors([[.0, Qt.green],
@@ -86,6 +89,7 @@ class mainclass(QMainWindow):
         self.my_gauge.pushButton_openfile.clicked.connect(self.openfile_read_list)
         self.my_gauge.pushButton_clear.clicked.connect(self.clear_name_list_widget)
 
+        self.my_gauge.name_list.itemSelectionChanged.connect(self.item_selection_changed)
 
 
         # self.my_gauge.widge
@@ -114,6 +118,21 @@ class mainclass(QMainWindow):
         self.button_panel.clicked.connect(self.toggle_panel)
         self.button_panel.move((x_pos - button_x_size / 2) + button_x_size, y_pos)  # + button_y_size / 2)
         self.button_panel.show()
+
+        text_x_size = 400
+        text_y_size = 75
+
+        self.name_highlight = QLabel(self)
+        self.name_highlight.setGeometry(x_pos+(button_x_size*2), 0, text_x_size, text_y_size)
+        self.name_highlight.move(x_pos + button_x_size*2 - button_x_size/2, -20)
+        # self.name_highlight.setGeometry(30, 30, text_x_size, text_y_size)
+        # self.name_highlight.move(70, -10)
+        self.name_highlight.setText("")
+        myfont = QFont("Fixed", 30)
+        myfont.setBold(True)
+        self.name_highlight.setFont(myfont)
+        self.name_highlight.show()
+
         self.panel_show = True
 
         self.running = sut(self.starten, self.stoppen, self.reset, self.my_queue, self.new_data)
@@ -204,6 +223,9 @@ class mainclass(QMainWindow):
 
                 self.my_gauge.name_list.scrollToItem(self.my_gauge.name_list.item(int(index)),
                                                       QAbstractItemView.PositionAtCenter)
+
+                self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
+
                 # print("Selected name = ", self.my_gauge.name_list.currentItem().text())
                 # print( self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem()))
 
@@ -275,13 +297,17 @@ class mainclass(QMainWindow):
         self.my_gauge.name_list.addItems(self.name_list)
         if self.my_gauge.name_list.count() > 0:
             self.my_gauge.name_list.setCurrentRow(0)
+            self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
             # print("Select row 0 ")
             # print("Selected row ", self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem()))
             # print("Row lenght ", self.my_gauge.name_list.count())
 
     def clear_name_list_widget(self):
         self.my_gauge.name_list.clear()
+        self.name_highlight.setText("")
 
+    def item_selection_changed(self):
+        self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
 
     def openFileNameDialog(self):
         # https://pythonspot.com/pyqt5-file-dialog/
