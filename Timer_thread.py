@@ -41,6 +41,7 @@ class Stoppuhr_thread(Thread):
         self.start_init = False
         while while_loop:
             # print("loop")
+            time.sleep(0.01)
             # endless loop until while_loop = False
             if self.stop.isSet():
                 print("StopEvent")
@@ -55,9 +56,9 @@ class Stoppuhr_thread(Thread):
                 self.start_init = False
 
             if self.starten.isSet():
-                time.sleep(0.001)
+                # time.sleep(0.001)
                 if self.start_init == False:
-                    print("started")
+                    # print("started")
                     self.TimerStart = time.time()
                     self.start_init = True
                     self.counter = 0
@@ -75,6 +76,7 @@ class Stoppuhr_thread(Thread):
                     self.counter += 1
 
                 if self.actual_countdouwn_value <= 0 or self.counter >= self.countdouwn_value:
+                    # print("clear starten event")
                     self.starten.clear()
                     self.start_init = False
                         # self.reset.set()
@@ -91,9 +93,6 @@ class Stoppuhr_thread(Thread):
             except Exception as e:
                 print("Error fallback_overwrite_", e)
             # time.sleep(0.01)
-
-
-
 
 def main():
     starten = Event()
