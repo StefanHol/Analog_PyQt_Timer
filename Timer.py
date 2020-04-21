@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 
 import os
 import time
@@ -71,6 +73,7 @@ class mainclass(QMainWindow):
         # window = QMainWindow()
         self.my_gauge = Ui_MainWindow()
         self.my_gauge.setupUi(self)
+        self.maxButton_NameTextLenght = 15 # Max charcters
 
 
 
@@ -141,11 +144,11 @@ class mainclass(QMainWindow):
 
         self.panel_show = True
 
-        self.toggle_button_label_info = False
-        self.toggle_info()
+        # self.toggle_button_label_info = False
+        self.toggle_button_label_info = self.my_gauge.checkBox_toggle_info.checkState()
+        # self.toggle_info()
         self.toggle_show_name_label()
         self.my_gauge.checkBox_show_name_label.stateChanged.connect(self.toggle_show_name_label)
-
 
         self.running = sut(self.starten, self.stoppen, self.reset, self.my_queue, self.new_data)
         self.running.start()
@@ -163,7 +166,9 @@ class mainclass(QMainWindow):
         print(self.actual_state)
 
         # add banner image
-        self.pixmap = QPixmap('banner.png')
+        banner_name = "banner.png"
+        banner_path = os.path.dirname(__file__) + os.path.sep + banner_name
+        self.pixmap = QPixmap(banner_path)
         # self.pixmap = self.pixmap.scaledToWidth(300)
         self.my_gauge.banner.setPixmap(self.pixmap)
         self.my_gauge.banner.setScaledContents(True)
@@ -172,7 +177,7 @@ class mainclass(QMainWindow):
 
         QTimer.singleShot(10, self.check_new_data)
         self.update()
-
+        self.toggle_info()
 
     # # Todo emit event
     # def paintEvent(self, event):
@@ -253,7 +258,7 @@ class mainclass(QMainWindow):
             if (self.my_gauge.name_list.count() > 0) and (
                     self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem()) < self.my_gauge.name_list.count()-1):
                 # self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
-                # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text())
+                # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text()[:self.maxButton_NameTextLenght])
                 # print("set state: ", self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem())+1)
                 index = self.my_gauge.name_list.row(
                             self.my_gauge.name_list.currentItem())+1
@@ -261,11 +266,12 @@ class mainclass(QMainWindow):
                 self.my_gauge.name_list.scrollToItem(self.my_gauge.name_list.item(int(index)),
                                                       QAbstractItemView.PositionAtCenter)
                 if self.toggle_button_label_info:
-                    # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text())
+                    # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text()[:self.maxButton_NameTextLenght])
                     pass
                 else:
-                    self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
-                # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text())
+                    # self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
+                    pass
+                # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text()[:self.maxButton_NameTextLenght])
 
                 # print("Selected name = ", self.my_gauge.name_list.currentItem().text())
                 # print( self.my_gauge.name_list.row(self.my_gauge.name_list.currentItem()))
@@ -301,7 +307,7 @@ class mainclass(QMainWindow):
             if (self.my_gauge.name_list.count() > 0) and (
                         self.my_gauge.name_list.row(
                             self.my_gauge.name_list.currentItem()) < self.my_gauge.name_list.count() - 1):
-                self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text())
+                self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text()[:self.maxButton_NameTextLenght])
                 self.name_highlight.setText(status_text)
             else:
                 self.my_gauge.pushButton.setText(status_text)
@@ -369,7 +375,8 @@ class mainclass(QMainWindow):
         self.my_gauge.name_list.addItems(self.name_list)
         if self.my_gauge.name_list.count() > 0:
             self.my_gauge.name_list.setCurrentRow(0)
-            self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
+            # self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
+            self.item_selection_changed()
 
     def clear_name_list_widget(self):
         self.my_gauge.name_list.clear()
@@ -379,16 +386,16 @@ class mainclass(QMainWindow):
         if self.toggle_button_label_info == False:
             self.name_highlight.setText(self.my_gauge.name_list.currentItem().text())
         else:
-            self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text())
+            self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text()[:self.maxButton_NameTextLenght])
 
     def openFileNameDialog(self):
         # https://pythonspot.com/pyqt5-file-dialog/
         name_list = []
-        options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Select name list", "","Text File (*.txt)", options=options)
+        fd = QFileDialog(self)
+        fileName, others = fd.getOpenFileName(self, "Select name list *.txt", os.path.dirname(__file__) ,"Text File (*.txt)")
+        print(fileName, others)
         if fileName:
-            print(fileName)
+            # print(fileName)
             name_list = self.read_name_list(fileName)
         return name_list
 
