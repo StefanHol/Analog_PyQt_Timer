@@ -137,7 +137,7 @@ class mainclass(QMainWindow):
         # self.name_highlight.setGeometry(30, 30, text_x_size, text_y_size)
         # self.name_highlight.move(70, -10)
         self.name_highlight.setText("")
-        myfont = QFont("Fixed", 30)
+        myfont = QFont("Segoe UI", 30)
         myfont.setBold(True)
         self.name_highlight.setFont(myfont)
         self.name_highlight.show()
