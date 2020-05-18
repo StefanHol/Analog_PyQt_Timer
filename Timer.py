@@ -401,13 +401,13 @@ class mainclass(QMainWindow):
 
     def read_name_list(self, filename):
         # Using readlines()
-        myfile = open(filename, 'r')
-        Lines = myfile.readlines()
+        with open(filename, 'r', encoding='utf8') as myfile:
+            Lines = myfile.readlines()
+
         name_list = []
         # Strips the newline character
         for line in Lines:
             name_list.append(line.strip())
-        myfile.close()
         name_list.append("Stop")
         return name_list
 
