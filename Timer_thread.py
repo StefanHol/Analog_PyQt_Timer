@@ -68,8 +68,8 @@ class Stoppuhr_thread(Thread):
 
 
                 if self.time_delta >= 0.1 * self.counter:
-
-                    print(self.counter, self.time_delta)
+                    # timer test ausgabe
+                    # print(self.counter, self.time_delta)
                     # print("start ist set")
                     self.actual_countdouwn_value -= 1
                     self.new_data.put(self.actual_countdouwn_value)

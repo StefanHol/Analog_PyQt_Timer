@@ -150,6 +150,10 @@ class mainclass(QMainWindow):
         self.toggle_show_name_label()
         self.my_gauge.checkBox_show_name_label.stateChanged.connect(self.toggle_show_name_label)
 
+        # Disable standard AnalogGaugeWidget float value, to replace with human readable time values
+        self.my_gauge.widget.set_enable_value_text(False)
+        self.my_gauge.widget.enable_user_defined_value_text = True
+
         self.running = sut(self.starten, self.stoppen, self.reset, self.my_queue, self.new_data)
         self.running.start()
 
@@ -325,9 +329,24 @@ class mainclass(QMainWindow):
                 pass
 
     def check_new_data(self):
+        # Zeitausgabe hier
+
         if not self.new_data.empty():
             data = self.new_data.get()/10
+            # data: Zeit in sekunden
             # print("new data", data)
+            if data <= 10:
+                timestring = '{:02}'.format(data % 60)
+                print(timestring)
+            elif data < 60:
+                timestring = '{:02}'.format(int(data % 60))
+            else:# data >= 60:
+                timestring = '{:02}:{:02}'.format(int(data // 3600), int(data % 3600 // 60))
+                print(timestring)
+
+            # ToDo: hier Anzeige mit Zeitformatierung überblenden
+            self.my_gauge.widget.update_userdefined_value(timestring)
+
             self.my_gauge.widget.update_value(data)
             # self.new_data.clear()
         else:

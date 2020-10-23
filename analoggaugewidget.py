@@ -121,6 +121,12 @@ class AnalogGaugeWidget(QWidget):
         self.value_needle_snapzone = 0.05
         self.last_value = 0
 
+        # show user value independent of actual needle value
+        # this is used to overwrite shown values
+        # use e.g. self.update_userdefined_value("01:59:33.5")
+        self.enable_user_defined_value_text = False
+        self.user_defined_value= ""
+
         # self.value2 = 0
         # self.value2Color = QColor(0, 0, 0, 255)
 
@@ -257,6 +263,9 @@ class AnalogGaugeWidget(QWidget):
         # ohne timer: aktiviere self.update()
         if not self.use_timer_event:
             self.update()
+
+    def update_userdefined_value(self, value, mouse_controlled = False):
+        self.user_defined_value = value
 
     def update_angle_offset(self, offset):
         self.angle_offset = offset
@@ -646,6 +655,46 @@ class AnalogGaugeWidget(QWidget):
         painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
         # painter.restore()
 
+    def create_user_defined_value_text(self, value_text):
+        painter = QPainter(self)
+        # painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        # Koordinatenursprung in die Mitte der Flaeche legen
+        painter.translate(self.width() / 2, self.height() / 2)
+        # painter.save()
+        # xShadow = 3.0
+        # yShadow = 3.0
+        font = QFont(self.value_fontname, self.value_fontsize)
+        fm = QFontMetrics(font)
+
+        pen_shadow = QPen()
+
+        pen_shadow.setBrush(self.DisplayValueColor)
+        painter.setPen(pen_shadow)
+
+        text_radius = self.widget_diameter / 2 * self.text_radius_factor
+
+        # angle_distance = (float(self.scale_angle_size) / float(self.scala_main_count))
+        # for i in range(self.scala_main_count + 1):
+        text = str((value_text))
+        w = fm.width(text) + 1
+        h = fm.height()
+        painter.setFont(QFont(self.value_fontname, self.value_fontsize))
+
+        # Mitte zwischen Skalenstart und Skalenende:
+        # Skalenende = Skalenanfang - 360 + Skalenlaenge
+        # Skalenmitte = (Skalenende - Skalenanfang) / 2 + Skalenanfang
+        angle_end = float(self.scale_angle_start_value + self.scale_angle_size - 360)
+        angle = (angle_end - self.scale_angle_start_value) / 2 + self.scale_angle_start_value
+
+        x = text_radius * math.cos(math.radians(angle))
+        y = text_radius * math.sin(math.radians(angle))
+        # print(w, h, x, y, text)
+        text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
+        painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
+        # painter.restore()
+
     def draw_big_needle_center_point(self, diameter=30):
         painter = QPainter(self)
         # painter.setRenderHint(QtGui.QPainter.HighQualityAntialiasing)
@@ -708,6 +757,9 @@ class AnalogGaugeWidget(QWidget):
         # Display Value
         if self.enable_value_text:
             self.create_values_text()
+
+        if self.enable_user_defined_value_text:
+            self.create_user_defined_value_text(self.user_defined_value)
 
         # draw needle 1
         if self.enable_Needle_Polygon:
