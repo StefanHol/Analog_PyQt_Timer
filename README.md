@@ -1,5 +1,7 @@
 # Analog_PyQt_Timer
 
+This is a simple countdown timer. Written in Python 3 with PyQt5
+
 ![Preview](img/Preview.JPG)
 
 
