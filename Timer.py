@@ -119,13 +119,13 @@ class mainclass(QMainWindow):
         self.button_ring =(QPushButton(str("sec"), self))
         self.button_ring.setGeometry(x_pos, y_pos, button_x_size, button_y_size)
         self.button_ring.clicked.connect(self.set_timer_seconds)
-        self.button_ring.move(x_pos - button_x_size / 2, y_pos)  # + button_y_size / 2)
+        self.button_ring.move(int(x_pos - button_x_size / 2), y_pos)  # + button_y_size / 2)
         self.button_ring.show()
 
         self.button_panel =(QPushButton(str(">"), self))
         self.button_panel.setGeometry(x_pos+button_x_size, y_pos, button_x_size, button_y_size)
         self.button_panel.clicked.connect(self.toggle_panel)
-        self.button_panel.move((x_pos - button_x_size / 2) + button_x_size, y_pos)  # + button_y_size / 2)
+        self.button_panel.move(int(x_pos - button_x_size / 2) + button_x_size, y_pos)  # + button_y_size / 2)
         self.button_panel.show()
 
         text_x_size = 500
@@ -133,7 +133,7 @@ class mainclass(QMainWindow):
 
         self.name_highlight = QLabel(self)
         self.name_highlight.setGeometry(x_pos+(button_x_size*2), 0, text_x_size, text_y_size)
-        self.name_highlight.move(x_pos + button_x_size*2 - button_x_size/2, -20)
+        self.name_highlight.move(int(x_pos + button_x_size * 2 - button_x_size/2), -20)
         # self.name_highlight.setGeometry(30, 30, text_x_size, text_y_size)
         # self.name_highlight.move(70, -10)
         self.name_highlight.setText("")
@@ -222,7 +222,7 @@ class mainclass(QMainWindow):
     def set_timer_seconds(self):
         min = 5
         max = 10000
-        num, ok = QInputDialog.getInt(self, "Change Time", "enter {} - {} seconds ".format(min, max), value = 30, min = min, max = max)
+        num, ok = QInputDialog.getInt(self, "Change Time", "enter {} - {} seconds ".format(min, max), value = 300, min = min, max = max)
         if ok:
             print("new value ", str(num))
             self.set_time(num)
@@ -244,10 +244,10 @@ class mainclass(QMainWindow):
             self.panel_show=True
 
     def set_time(self, value):
-        self.timer_value = value * 10 # sec * 10
+        self.timer_value = value * 10  # sec * 10
         self.my_gauge.widget.value_max = int(self.timer_value / 10)
 
-        self.my_gauge.widget.scala_main_count = int(self.timer_value / self.timer_value*10)
+        self.my_gauge.widget.scala_main_count = int(self.timer_value / self.timer_value * 10)  # noqa
         self.my_gauge.widget.update_value(self.timer_value)
         self.running.set_countdouwn_value(self.timer_value)
 
@@ -268,7 +268,7 @@ class mainclass(QMainWindow):
                             self.my_gauge.name_list.currentItem())+1
                 self.my_gauge.name_list.setCurrentRow(index)
                 self.my_gauge.name_list.scrollToItem(self.my_gauge.name_list.item(int(index)),
-                                                      QAbstractItemView.PositionAtCenter)
+                                                     QAbstractItemView.PositionAtCenter)
                 if self.toggle_button_label_info:
                     # self.my_gauge.pushButton.setText(self.my_gauge.name_list.currentItem().text()[:self.maxButton_NameTextLenght])
                     pass
@@ -333,16 +333,36 @@ class mainclass(QMainWindow):
 
         if not self.new_data.empty():
             data = self.new_data.get()/10
+
+            seconds_int = int(data % 60)
+            # Doppelpunkt blinkt: bei geraden Sekunden Doppelpunkt sichtbar, bei ungeraden nicht
+            colon = ' ' if (seconds_int % 2 == 0) else ':'
+
             # data: Zeit in sekunden
             # print("new data", data)
             if data <= 10:
-                timestring = '{:02}'.format(data % 60)
+                # timestring = '{:02}'.format(data % 60)
+                timestring = f'{seconds_int:02}'
                 print(timestring)
             elif data < 60:
-                timestring = '{:02}'.format(int(data % 60))
+                # timestring = '{:02}'.format(int(data % 60))
+                # Sekunden zweistellig, z.B. "45"
+                timestring = '{:02d}'.format(int(data % 60))
+                timestring = f'{seconds_int:02}'
+            elif data < 3600:
+                # Minuten:Sekunden, z.B. "12:34"
+                minutes = int(data // 60)
+                timestring = f'{minutes:02d}:{seconds_int:02d}'
             else:# data >= 60:
-                timestring = '{:02}:{:02}'.format(int(data // 3600), int(data % 3600 // 60))
-                print(timestring)
+                # Optional: Stunden:Minuten:Sekunden, z.B. "01:23:45"
+                hours = int(data // 3600)
+                minutes = int((data % 3600) // 60)
+
+                # sekundenanzeige
+                # timestring = f'{hours:02d}:{minutes:02d}:{seconds_int:02d}'
+
+                # Doppelpunkt blinkt
+                timestring = f'{hours:02d}{colon}{minutes:02d}'
 
             # ToDo: hier Anzeige mit Zeitformatierung überblenden
             self.my_gauge.widget.update_userdefined_value(timestring)

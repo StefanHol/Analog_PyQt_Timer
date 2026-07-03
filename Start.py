@@ -10,7 +10,6 @@
 ###
 
 
-
 import sys
 import os
 sys.path.append(os.path.dirname(__file__))
@@ -18,6 +17,7 @@ sys.path.append(os.path.dirname(__file__))
 print(os.path.dirname(__file__))
 
 from threading import Thread, Event
+from Timer import mainclass
 
 try:
     from PyQt5.QtWidgets import QApplication, QFrame
@@ -41,7 +41,6 @@ def compile_my_GUI():
 
 # compile_my_GUI()
 
-from Timer import mainclass
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
