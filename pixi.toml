@@ -1,0 +1,11 @@
+[workspace]
+authors = ["Stefan H"]
+channels = ["conda-forge"]
+name = "Analog_PyQt_Timer"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+start = "python3 Start.py"
+
+[dependencies]
